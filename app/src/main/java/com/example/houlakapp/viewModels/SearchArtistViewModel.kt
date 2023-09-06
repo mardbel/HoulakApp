@@ -28,4 +28,11 @@ class SearchArtistViewModel @Inject constructor(private val searchArtistReposito
 
         }
     }
+
+    fun getArtistById(id: String) {
+        viewModelScope.launch {
+            //val response = searchArtistRepository.getArtistById(id)
+        }
+    }
+
 }

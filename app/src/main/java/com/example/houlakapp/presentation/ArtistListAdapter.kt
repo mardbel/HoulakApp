@@ -9,7 +9,8 @@ import com.example.houlakapp.R
 import com.example.houlakapp.databinding.ArtistViewholderBinding
 import com.example.houlakapp.model.Artist
 
-class ArtistListAdapter : RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder>() {
+class ArtistListAdapter(val onItemClick: (String) -> Unit) :
+    RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolder>() {
 
     private var mItems: List<Artist> = listOf()
 
@@ -25,7 +26,7 @@ class ArtistListAdapter : RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolde
         val layoutInflater = LayoutInflater.from(parent.context)
         return ArtistViewHolder(
             layoutInflater.inflate(R.layout.artist_viewholder, parent, false),
-            //onItemClick
+            onItemClick
         )
     }
 
@@ -39,17 +40,18 @@ class ArtistListAdapter : RecyclerView.Adapter<ArtistListAdapter.ArtistViewHolde
 
     class ArtistViewHolder(
         view: View,
-        //val onItemClick: (String) -> Unit
+        val onItemClick: (String) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val binding = ArtistViewholderBinding.bind(view)
 
         fun bind(item: Artist) {
             binding.tvName.text = item.name
-            Glide.with(binding.imgHomeHolder.context).load(item.images.first().url).into(binding.imgHomeHolder)
-            /*binding.root.setOnClickListener {
-                onItemClick(item.id)*/
+            Glide.with(binding.imgHomeHolder.context).load(item.images.first().url)
+                .into(binding.imgHomeHolder)
+            binding.root.setOnClickListener {
+                onItemClick(item.id)
+            }
         }
     }
-
 }

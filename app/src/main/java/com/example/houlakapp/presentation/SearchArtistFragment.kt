@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.ListFragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.houlakapp.R
 import com.example.houlakapp.databinding.FragmentSearchArtistBinding
@@ -16,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SearchArtistFragment : Fragment() {
 
-    lateinit var binding : FragmentSearchArtistBinding
+    private lateinit var binding : FragmentSearchArtistBinding
     private val viewModel by viewModels<SearchArtistViewModel>()
     private lateinit var mAdapter : ArtistListAdapter
 
@@ -38,7 +40,13 @@ class SearchArtistFragment : Fragment() {
         }
 
         binding.artistRv.layoutManager = LinearLayoutManager(requireContext())
-        mAdapter = ArtistListAdapter()
+        mAdapter = ArtistListAdapter(
+            onItemClick = {
+                val action = SearchArtistFragmentDirections.actionListFragmentToDetailFragment(it)
+                view.findNavController().navigate(action)
+            }
+        )
+
         binding.artistRv.adapter = mAdapter
 
 
