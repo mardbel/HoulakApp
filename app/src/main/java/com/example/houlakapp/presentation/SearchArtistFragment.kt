@@ -5,15 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.houlakapp.R
 import com.example.houlakapp.databinding.FragmentSearchArtistBinding
+import com.example.houlakapp.viewModels.SearchArtistViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchArtistFragment : Fragment() {
 
     lateinit var binding : FragmentSearchArtistBinding
+    private val viewModel by viewModels<SearchArtistViewModel>()
+    private lateinit var mAdapter : ArtistListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,9 +33,23 @@ class SearchArtistFragment : Fragment() {
         binding = FragmentSearchArtistBinding.bind(view)
 
         binding.searchButton.setOnClickListener {
-            Toast.makeText(activity, "apretaste el boton", Toast.LENGTH_LONG).show()
+            val artistSearched = binding.searchEditText.text.toString()
+            viewModel.searchArtistByName(artistSearched)
         }
 
+        binding.artistRv.layoutManager = LinearLayoutManager(requireContext())
+        mAdapter = ArtistListAdapter()
+        binding.artistRv.adapter = mAdapter
+
+
+        viewModel.welcomeState.observe(viewLifecycleOwner) {
+            if (!it) binding.linearLayout.isVisible = false
+        }
+
+        viewModel.artistList.observe(viewLifecycleOwner) {
+            binding.artistRv.isVisible = true
+            mAdapter.setItems(it)
+        }
 
     }
 }

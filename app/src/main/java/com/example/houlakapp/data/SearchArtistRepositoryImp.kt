@@ -19,12 +19,10 @@ class SearchArtistRepositoryImp @Inject constructor(
     private val clientSecret = "3aa446d1e15f40d1b05b3250c36dc8d0"
 
     override suspend fun searchArtistByName(name: String): Response<ArtistResultsResponse> {
-
-
         return artistService.searchArtistByName(getToken(), name)
     }
 
-    suspend fun getToken(): BearerToken {
+    private suspend fun getToken(): BearerToken {
 
         val authString = "$clientId:$clientSecret"
         val authBytes = authString.toByteArray()
@@ -33,8 +31,5 @@ class SearchArtistRepositoryImp @Inject constructor(
 
         val token = authenticationService.getNewAccessToken("Basic $authBase64")
         return BearerToken(token.accessToken, LocalDateTime.now(), token.secondsUntilExpiration)
-
     }
-
-
 }
