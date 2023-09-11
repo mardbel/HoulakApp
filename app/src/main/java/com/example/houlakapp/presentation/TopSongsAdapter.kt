@@ -41,8 +41,6 @@ class TopSongsAdapter: RecyclerView.Adapter<TopSongsAdapter.SongsViewHolder>() {
 
         fun bind(item: Track?) {
             binding.songNameTv.text = item?.name
-            /*Glide.with(binding.imgHomeHolder.context).load(item.images.firstOrNull()?.url ?: "https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png")
-                .into(binding.imgHomeHolder)*/
         }
     }
 

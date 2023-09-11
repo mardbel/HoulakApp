@@ -5,5 +5,5 @@ data class Artist(
     val id: String,
     val images: List<Image>,
     val name: String,
-    val popularity: Int, //sorted by
+    val popularity: Int
 )
