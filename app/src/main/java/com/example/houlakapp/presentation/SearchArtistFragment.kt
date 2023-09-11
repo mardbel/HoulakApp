@@ -23,7 +23,6 @@ class SearchArtistFragment : Fragment() {
     private lateinit var binding : FragmentSearchArtistBinding
     private val viewModel by viewModels<SearchArtistViewModel>()
     private lateinit var mAdapter : ArtistListAdapter
-    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +51,10 @@ class SearchArtistFragment : Fragment() {
 
         binding.artistRv.adapter = mAdapter
 
+        binding.newSearchButton.setOnClickListener {
+            viewModel.newSearch()
+        }
+
 
 
         viewModel.searchArtistState.observe(viewLifecycleOwner) {
@@ -61,10 +64,17 @@ class SearchArtistFragment : Fragment() {
                         binding.searcherLayout.isVisible = false
                         mAdapter.setItems(it.artistList)
                         binding.artistRv.isVisible = true
+                        binding.newSearchButton.isVisible = true
                         binding.progressBar.isVisible = false
+
+                    } else {
+                        binding.searcherLayout.isVisible = true
+                        binding.artistRv.isVisible = false
+                        binding.newSearchButton.isVisible = false
+                        binding.progressBar.isVisible = false
+                        binding.searchEditText.text.clear()
                     }
                 }
         }
-
     }
 }

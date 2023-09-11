@@ -45,6 +45,10 @@ class SearchArtistViewModel @Inject constructor(
         }
     }
 
+    fun newSearch() {
+        mSearchArtistState.value = mSearchArtistState.value?.copy(showSearcher = true)
+    }
+
     private suspend fun getArtist(name: String) {
         if (mToken.value != null) {}
         searchArtistRepository.searchArtistByName(name, mToken.value!!).collect { artistResult ->

@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:hint="enter an artist"
+        android:hint="@string/enter_artist_button_text"
         android:maxLines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -36,15 +36,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/search_artist_button"
         android:textAllCaps="false"
-        android:layout_marginTop="15dp"
-        />
+        android:layout_marginTop="15dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/artist_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/new_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Nueva busqueda"
+        android:textAllCaps="false"
+        android:layout_marginTop="15dp"
+        android:visibility="gone"/>
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/progress_bar"
@@ -53,7 +67,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:elevation="24dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
