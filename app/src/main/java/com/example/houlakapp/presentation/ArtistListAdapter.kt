@@ -46,8 +46,8 @@ class ArtistListAdapter(val onItemClick: (String) -> Unit) :
         private val binding = ArtistViewholderBinding.bind(view)
 
         fun bind(item: Artist) {
-            binding.tvName.text = item.name
-            Glide.with(binding.imgHomeHolder.context).load(item.images.first().url)
+            binding.songNameTv.text = item.name
+            Glide.with(binding.imgHomeHolder.context).load(item.images.firstOrNull()?.url ?: "https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png")
                 .into(binding.imgHomeHolder)
             binding.root.setOnClickListener {
                 onItemClick(item.id)

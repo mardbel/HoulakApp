@@ -1,10 +1,12 @@
 package com.example.houlakapp.presentation
 
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.fragment.app.ListFragment
 import androidx.fragment.app.viewModels
@@ -21,6 +23,7 @@ class SearchArtistFragment : Fragment() {
     private lateinit var binding : FragmentSearchArtistBinding
     private val viewModel by viewModels<SearchArtistViewModel>()
     private lateinit var mAdapter : ArtistListAdapter
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,13 +53,17 @@ class SearchArtistFragment : Fragment() {
         binding.artistRv.adapter = mAdapter
 
 
-        viewModel.welcomeState.observe(viewLifecycleOwner) {
-            if (!it) binding.linearLayout.isVisible = false
-        }
 
-        viewModel.artistList.observe(viewLifecycleOwner) {
-            binding.artistRv.isVisible = true
-            mAdapter.setItems(it)
+        viewModel.searchArtistState.observe(viewLifecycleOwner) {
+            if (it.isLoading) binding.progressBar.isVisible = true
+                else {
+                    if (!it.showSearcher) {
+                        binding.searcherLayout.isVisible = false
+                        mAdapter.setItems(it.artistList)
+                        binding.artistRv.isVisible = true
+                        binding.progressBar.isVisible = false
+                    }
+                }
         }
 
     }

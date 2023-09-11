@@ -2,4 +2,8 @@
     <string name="app_name">HoulakApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_artist_button">buscar!</string>
+    <string name="image_place_holder">https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png</string>
+    <string name="no_genre">sin clasificar</string>
+    <string name="generic_error">Error genérico</string>
 </resources>

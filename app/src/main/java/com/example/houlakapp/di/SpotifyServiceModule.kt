@@ -1,9 +1,13 @@
 package com.example.houlakapp.di
 
+import android.app.Application
 import com.example.houlakapp.data.SearchArtistRepository
+import com.example.houlakapp.data.SearchArtistRepositoryImp
 import com.example.houlakapp.data.TokenRepository
+import com.example.houlakapp.data.TokenRepositoryImp
 import com.example.houlakapp.data.remote.AuthenticationService
 import com.example.houlakapp.data.remote.SpotifyService
+import com.example.houlakapp.util.SharePreferencesProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,12 +17,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-
-const val BASE_URL = "https://accounts.api.spotify.com/"
+import kotlin.coroutines.coroutineContext
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SpotifyServiceModule {
+
+class SpotifyServiceModule {
     @Provides
     @Singleton
     fun provideSpotifyService(): SpotifyService = Retrofit.Builder()
@@ -29,20 +33,29 @@ object SpotifyServiceModule {
 
     @Provides
     @Singleton
-    fun provideTokenManager(): TokenRepository = Retrofit.Builder()
-        .baseUrl(SpotifyBaseUrls.AUTHENTICATION_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(TokenRepository::class.java)
+    fun provideTokenManager(
+        authenticationService: AuthenticationService,
+        sharePreferencesProvider: SharePreferencesProvider
+    ): TokenRepository {
+        return TokenRepositoryImp(authenticationService, sharePreferencesProvider)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharePreferences(
+        application: Application
+    ): SharePreferencesProvider {
+        return SharePreferencesProvider(application)
+    }
 
 
     @Provides
     @Singleton
-    fun provideSearchArtistRepository(): SearchArtistRepository = Retrofit.Builder()
-        .baseUrl(SpotifyBaseUrls.API_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(SearchArtistRepository::class.java)
+    fun provideSearchArtistRepository(
+            artistService: SpotifyService
+    ): SearchArtistRepository {
+        return SearchArtistRepositoryImp(artistService)
+    }
 
     @Provides
     @Singleton
@@ -52,8 +65,8 @@ object SpotifyServiceModule {
         .build()
         .create(AuthenticationService::class.java)
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesRetrofitClient(): Retrofit {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -61,7 +74,7 @@ object SpotifyServiceModule {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logging)
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(SpotifyBaseUrls.API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient.build())
             .build()
