@@ -5,6 +5,6 @@
     <string name="search_artist_button">buscar!</string>
     <string name="image_place_holder">https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png</string>
     <string name="no_genre">sin clasificar</string>
-    <string name="generic_error">Error genérico</string>
+    <string name="generic_error">Error genérico, por favor intenta de nuevo</string>
     <string name="enter_artist_button_text">enter an artist</string>
 </resources>
