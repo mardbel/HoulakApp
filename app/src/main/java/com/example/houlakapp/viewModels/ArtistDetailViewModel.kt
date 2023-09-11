@@ -18,8 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ArtistDetailViewModel@Inject constructor(
     private val searchArtistRepository: SearchArtistRepository,
-    private val tokenRepository: TokenRepository,
-    private val sharePreferencesProvider: SharePreferencesProvider,
+    private val tokenRepository: TokenRepository
 ) : ViewModel() {
 
     private val mState = MutableLiveData<ArtistDetailState>()
@@ -37,7 +36,7 @@ class ArtistDetailViewModel@Inject constructor(
 
     fun getArtistById(id: String) {
         viewModelScope.launch {
-                searchArtistRepository.searchArtistById(id, sharePreferencesProvider.getSavedToken()).collect {
+                searchArtistRepository.searchArtistById(id).collect {
                     when (it) {
                         is SearchArtistRepository.ArtistResult.Success -> mState.value = mState.value?.copy(artist = it.data)
                         is SearchArtistRepository.ArtistResult.ExpiredToken -> {
@@ -53,7 +52,7 @@ class ArtistDetailViewModel@Inject constructor(
 
     fun getTopTracks(id: String) {
         viewModelScope.launch {
-            searchArtistRepository.getTopTracks(id, sharePreferencesProvider.getSavedToken()).collect {
+            searchArtistRepository.getTopTracks(id).collect {
                 when (it) {
                     is SearchArtistRepository.ArtistResult.Success -> {
                         var responseSize = 0

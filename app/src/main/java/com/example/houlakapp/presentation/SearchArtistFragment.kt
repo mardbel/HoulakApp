@@ -1,18 +1,14 @@
 package com.example.houlakapp.presentation
 
-import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.core.view.isVisible
-import androidx.fragment.app.ListFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.houlakapp.R
 import com.example.houlakapp.databinding.FragmentSearchArtistBinding
 import com.example.houlakapp.viewModels.SearchArtistViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +24,8 @@ class SearchArtistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search_artist, container, false)
+        binding = FragmentSearchArtistBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,23 +55,27 @@ class SearchArtistFragment : Fragment() {
 
 
         viewModel.searchArtistState.observe(viewLifecycleOwner) {
-            if (it.isLoading) binding.progressBar.isVisible = true
-                else {
-                    if (!it.showSearcher) {
-                        binding.searcherLayout.isVisible = false
-                        mAdapter.setItems(it.artistList)
-                        binding.artistRv.isVisible = true
-                        binding.newSearchButton.isVisible = true
-                        binding.progressBar.isVisible = false
-
-                    } else {
-                        binding.searcherLayout.isVisible = true
-                        binding.artistRv.isVisible = false
-                        binding.newSearchButton.isVisible = false
-                        binding.progressBar.isVisible = false
-                        binding.searchEditText.text.clear()
-                    }
-                }
+            if (it.isLoading) {
+                binding.progressBar.isVisible = true
+                /*binding.searcherLayout.isVisible = false
+                binding.artistRv.isVisible = false
+                binding.newSearchButton.isVisible = false*/
+            } else if (!it.showSearcher) {
+                binding.searcherLayout.isVisible = false
+                mAdapter.setItems(it.artistList)
+                binding.artistRv.isVisible = true
+                binding.newSearchButton.isVisible = true
+                binding.progressBar.isVisible = false
+            } else if (it.error) {
+                binding.progressBar.isVisible = true
+            } else {
+                binding.searcherLayout.isVisible = true
+                binding.artistRv.isVisible = false
+                binding.newSearchButton.isVisible = false
+                binding.progressBar.isVisible = false
+                binding.searchEditText.text.clear()
+            }
         }
+
     }
 }

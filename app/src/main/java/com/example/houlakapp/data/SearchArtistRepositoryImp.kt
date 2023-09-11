@@ -2,6 +2,7 @@ package com.example.houlakapp.data
 
 import com.example.houlakapp.data.remote.SpotifyService
 import com.example.houlakapp.model.*
+import com.example.houlakapp.util.SharePreferencesProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import retrofit2.HttpException
@@ -12,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class SearchArtistRepositoryImp @Inject constructor(
     private val artistService: SpotifyService,
+    private val sharePreferencesProvider: SharePreferencesProvider,
     ) : SearchArtistRepository {
 
     override suspend fun searchArtistByName(name: String, token: BearerToken): Flow<SearchArtistRepository.ArtistResult<ArtistResultsResponse?>> {
@@ -36,9 +38,9 @@ class SearchArtistRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun searchArtistById(id: String, token: BearerToken): Flow<SearchArtistRepository.ArtistResult<Artist?>> {
+    override suspend fun searchArtistById(id: String): Flow<SearchArtistRepository.ArtistResult<Artist?>> {
         return try {
-            val response = artistService.searchArtistById(token, id)
+            val response = artistService.searchArtistById(sharePreferencesProvider.getSavedToken(), id)
             if (response.isSuccessful) {
                 flowOf(SearchArtistRepository.ArtistResult.Success(response.body()!!))
             } else flowOf(SearchArtistRepository.ArtistResult.NetworkError)
@@ -57,9 +59,9 @@ class SearchArtistRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun getTopTracks(id: String, token: BearerToken): Flow<SearchArtistRepository.ArtistResult<TracksResponse?>> {
+    override suspend fun getTopTracks(id: String): Flow<SearchArtistRepository.ArtistResult<TracksResponse?>> {
         return try {
-            val response = artistService.getArtistTopTracks(token, id)
+            val response = artistService.getArtistTopTracks(sharePreferencesProvider.getSavedToken(), id)
             if (response.isSuccessful) {
                 flowOf(SearchArtistRepository.ArtistResult.Success(response.body()!!))
             } else flowOf(SearchArtistRepository.ArtistResult.NetworkError)

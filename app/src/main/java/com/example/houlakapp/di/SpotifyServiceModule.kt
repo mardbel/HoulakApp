@@ -52,9 +52,10 @@ class SpotifyServiceModule {
     @Provides
     @Singleton
     fun provideSearchArtistRepository(
-            artistService: SpotifyService
+            artistService: SpotifyService,
+            sharePreferencesProvider: SharePreferencesProvider
     ): SearchArtistRepository {
-        return SearchArtistRepositoryImp(artistService)
+        return SearchArtistRepositoryImp(artistService, sharePreferencesProvider)
     }
 
     @Provides

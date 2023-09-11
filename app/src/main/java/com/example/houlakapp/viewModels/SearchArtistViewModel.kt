@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.houlakapp.data.SearchArtistRepository
 import com.example.houlakapp.data.TokenRepository
-import com.example.houlakapp.di.SpotifyBaseUrls
 import com.example.houlakapp.model.Artist
 import com.example.houlakapp.model.BearerToken
-import com.example.houlakapp.util.SharePreferencesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -46,7 +44,7 @@ class SearchArtistViewModel @Inject constructor(
     }
 
     fun newSearch() {
-        mSearchArtistState.value = mSearchArtistState.value?.copy(showSearcher = true)
+        mSearchArtistState.value = mSearchArtistState.value?.copy(showSearcher = true, isLoading = false, error = false)
     }
 
     private suspend fun getArtist(name: String) {
@@ -77,14 +75,14 @@ class SearchArtistViewModel @Inject constructor(
     }
 
     private suspend fun getToken() {
-        mSearchArtistState.value = mSearchArtistState.value?.copy(isLoading = true)
+        mSearchArtistState.value = mSearchArtistState.value?.copy(error = true)
         when (val response = tokenRepository.getToken()) {
-            is TokenRepository.AuthenticationResult.Success ->
-            { mToken.value = BearerToken(
+            is TokenRepository.AuthenticationResult.Success -> {
+                mToken.value = BearerToken(
                 response.token.accessToken,
                 LocalDateTime.now(),
                 response.token.secondsUntilExpiration
-            )
+                )
             }
             else -> null
         }

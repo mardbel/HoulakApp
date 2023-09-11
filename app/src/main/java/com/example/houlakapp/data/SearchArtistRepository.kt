@@ -20,8 +20,8 @@ interface SearchArtistRepository {
         object BadRequest : ArtistResult<Nothing?>()
     }
 
-    suspend fun searchArtistById(id: String, token: BearerToken): Flow<ArtistResult<Artist?>>
+    suspend fun searchArtistById(id: String): Flow<ArtistResult<Artist?>>
 
-    suspend fun getTopTracks(id: String, token: BearerToken): Flow<ArtistResult<TracksResponse?>>
+    suspend fun getTopTracks(id: String): Flow<ArtistResult<TracksResponse?>>
 
 }
